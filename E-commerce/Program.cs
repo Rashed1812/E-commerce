@@ -9,10 +9,12 @@ namespace E_commerce
 
             // Add services to the container.
 
+            #region DI
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(); 
+            #endregion
 
             var app = builder.Build();
 
