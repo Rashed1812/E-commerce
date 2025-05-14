@@ -1,6 +1,8 @@
 
 using System.Threading.Tasks;
 using Domain.Contracts;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Data;
@@ -8,6 +10,7 @@ using Persistence.Repositotories;
 using Service;
 using Service.MappingProfiles;
 using ServiceAbstraction;
+using Shared.Error_Models;
 
 namespace E_commerce
 {
@@ -30,6 +33,10 @@ namespace E_commerce
             builder.Services.AddScoped<IUnitOfWork, UnitOfwork>();
             builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            builder.Services.Configure<ApiBehaviorOptions>((options) =>
+            {
+                options.InvalidModelStateResponseFactory = ApiResponseFactory.GenerateApiVaidationErrorResponse;
+            });
             #endregion
 
             var app = builder.Build();
@@ -39,6 +46,7 @@ namespace E_commerce
             var ObjectOfDataSeeding = Scoope.ServiceProvider.GetRequiredService<IDataSeeding>();
             await ObjectOfDataSeeding.DataSeedAsync();
 
+            app.UseMiddleware<CustomExceptionHandleMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
