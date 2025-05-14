@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositotories
 {
-    public static class     SpecificationEvaluator
+    public static class SpecificationEvaluator
     {
-        public static IQueryable<TEntity> CreateQuery<TEntity,TKey>(IQueryable<TEntity> inputQuery, ISpecification<TEntity,TKey> specification)
+        public static IQueryable<TEntity> CreateQuery<TEntity, TKey>(IQueryable<TEntity> inputQuery, ISpecification<TEntity, TKey> specification)
             where TEntity : BaseEntity<TKey>
         {
             var query = inputQuery; //_storeDbContext.Set<TEntity>();
@@ -23,7 +23,7 @@ namespace Persistence.Repositotories
             query = specification.IncludeExpression.Aggregate(query,
                 (currentQuery, include) => currentQuery.Include(include));
             //_storeDbContext.Set<TEntity>().Include(specification.IncludeExpression);
-            if(specification.OrderBy != null)
+            if (specification.OrderBy != null)
                 query = query.OrderBy(specification.OrderBy);
 
             else if (specification.OrderByDescending != null)

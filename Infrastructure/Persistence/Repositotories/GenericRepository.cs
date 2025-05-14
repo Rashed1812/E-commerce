@@ -24,7 +24,6 @@ namespace Persistence.Repositotories
         public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity, TKey> specification)
         {
           return await  SpecificationEvaluator.CreateQuery(_storeDbContext.Set<TEntity>(), specification).ToListAsync();
-
         }
         public async Task<TEntity> GetByIdAsync(ISpecification<TEntity, TKey> specification)
         {
