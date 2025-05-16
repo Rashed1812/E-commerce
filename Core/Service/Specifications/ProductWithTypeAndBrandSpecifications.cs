@@ -4,8 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Models;
-using Shared.DataTransferObject;
+using Domain.Models.ProductModule;
+using Shared.DataTransferObject.ProductModuleDtos;
 
 namespace Service.Specifications
 {
