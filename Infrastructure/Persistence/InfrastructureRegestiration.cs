@@ -12,6 +12,7 @@ using Persistence.Repositotories;
 using Persistence.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace Persistence
 {
@@ -26,6 +27,11 @@ namespace Persistence
             });
             services.AddScoped<IDataSeeding, DataSeeding>();
             services.AddScoped<IUnitOfWork, UnitOfwork>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddSingleton<IConnectionMultiplexer>((_) =>
+            {
+               return ConnectionMultiplexer.Connect(configuration.GetConnectionString("RediosConnection"));
+            });
             return services;
         }
     }
