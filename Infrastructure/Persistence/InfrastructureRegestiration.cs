@@ -13,6 +13,8 @@ using Persistence.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Persistence.Identity;
 
 namespace Persistence
 {
@@ -31,6 +33,11 @@ namespace Persistence
             services.AddSingleton<IConnectionMultiplexer>((_) =>
             {
                return ConnectionMultiplexer.Connect(configuration.GetConnectionString("RediosConnection"));
+            });
+            services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                var connectionString = configuration.GetConnectionString("IdentityConnection");
+                options.UseSqlServer(connectionString);
             });
             return services;
         }
