@@ -30,14 +30,12 @@ namespace E_commerce
 
             builder.Services.AddApplicationServices();
             builder.Services.AddWebApplicationServices();
+            builder.Services.AddJWTService(builder.Configuration);
             #endregion
 
             var app = builder.Build();
 
-            //Using For Data Seeding To Despose 
-            using var Scoope = app.Services.CreateScope();
-            var ObjectOfDataSeeding = Scoope.ServiceProvider.GetRequiredService<IDataSeeding>();
-            await ObjectOfDataSeeding.DataSeedAsync();
+            await app.SeedDatabaseAsync();
 
             app.UseMiddleware<CustomExceptionHandleMiddleware>();
             // Configure the HTTP request pipeline.
@@ -49,9 +47,9 @@ namespace E_commerce
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();

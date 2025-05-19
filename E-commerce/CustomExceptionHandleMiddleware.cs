@@ -32,6 +32,11 @@ namespace E_commerce
             }
             catch(Exception ex)
             {
+                var Response = new ErrorToReturn()
+                {
+                    StatusCode = httpContext.Response.StatusCode,
+                    ErrorMessage = ex.Message
+                };
                 _logger.LogError(ex, ex.Message);
 
 
@@ -39,7 +44,8 @@ namespace E_commerce
 
                 {
                     NotFoundException => StatusCodes.Status404NotFound,
-
+                    UnAuthorizedException => StatusCodes.Status401Unauthorized,
+                    BadRequestException badRequestException => GetBadRequestErrors(badRequestException, Response),
                     _ => StatusCodes.Status500InternalServerError
                 };
                 //set status code for response
@@ -47,14 +53,15 @@ namespace E_commerce
                 //set content type for response
                 httpContext.Response.ContentType = "application/json";
                 //response object
-                var Response = new ErrorToReturn()
-                {
-                    StatusCode = httpContext.Response.StatusCode,
-                    ErrorMessage = ex.Message
-                };
                 //return object as json
                 await httpContext.Response.WriteAsJsonAsync(Response);
             }
+        }
+
+        private int GetBadRequestErrors(BadRequestException badRequestException, ErrorToReturn response)
+        {
+           response.Errors = badRequestException.Erros;
+            return StatusCodes.Status400BadRequest;
         }
     }
 }
