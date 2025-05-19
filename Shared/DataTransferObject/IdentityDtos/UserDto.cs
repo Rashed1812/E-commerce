@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
-namespace Domain.Models.IdentityModule
+namespace Shared.DataTransferObject.IdentityDtos
 {
-    public class ApplicationUser :IdentityUser
+    public class UserDto
     {
+        public string Email { get; set; } = default!;
+        public string Token { get; set; } = default!;
         public string DisplayName { get; set; } = default!;
-        public Address? Address { get; set; }
     }
 }
