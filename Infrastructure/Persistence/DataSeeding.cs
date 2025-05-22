@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Contracts;
 using Domain.Models.IdentityModule;
+using Domain.Models.Order_Module;
 using Domain.Models.ProductModule;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -52,13 +53,20 @@ namespace Persistence
                     if (Products is not null && Products.Any())
                        await _DbContext.Products.AddRangeAsync(Products);
                 }
+                if (!_DbContext.Set<DeliveryMethod>().Any())
+                {
+                    var DeliveryMethodData = File.OpenRead(@"..\Infrastructure\Persistence\Data\DataSeed\delivery.json");
+                    //Convert data from json to C# object
+                    var DeliveryMethod = await JsonSerializer.DeserializeAsync<List<DeliveryMethod>>(DeliveryMethodData);
+                    if (DeliveryMethod is not null && DeliveryMethod.Any())
+                        await _DbContext.Set<DeliveryMethod>().AddRangeAsync(DeliveryMethod);
+                }
                 #endregion
                 await _DbContext.SaveChangesAsync();
-
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
         }
 
