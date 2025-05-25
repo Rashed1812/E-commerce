@@ -12,7 +12,8 @@ using ServiceAbstraction;
 
 namespace Service
 {
-    public class ServiceManager(IUnitOfWork _unitOfWork,IMapper _mapper,IBasketRepository basketRepository,UserManager<ApplicationUser> userManager,IConfiguration _configuration) : IServiceManager
+    public class ServiceManager(IUnitOfWork _unitOfWork,IMapper _mapper,IBasketRepository basketRepository,
+        UserManager<ApplicationUser> userManager,IConfiguration _configuration)     
     {
         private readonly Lazy<IProductService> _LazyProductService = new Lazy<IProductService>(() => new ProductService(_unitOfWork,_mapper));
         private readonly Lazy<IBasketService> _LazyBasketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, _mapper));

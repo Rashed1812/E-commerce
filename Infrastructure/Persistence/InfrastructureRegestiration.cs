@@ -32,6 +32,7 @@ namespace Persistence
             services.AddScoped<IDataSeeding, DataSeeding>();
             services.AddScoped<IUnitOfWork, UnitOfwork>();
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<ICasheRepository, CasheRepository>();
             services.AddSingleton<IConnectionMultiplexer>((_) =>
             {
                return ConnectionMultiplexer.Connect(configuration.GetConnectionString("RediosConnection"));
