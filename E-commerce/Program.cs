@@ -1,4 +1,6 @@
 
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Domain.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -11,6 +13,7 @@ using Service;
 using Service.MappingProfiles;
 using ServiceAbstraction;
 using Shared.Error_Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace E_commerce
 {
@@ -42,7 +45,23 @@ namespace E_commerce
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(Options =>
+                {
+                    Options.ConfigObject = new ConfigObject()
+                    {
+                        DisplayRequestDuration = true
+                    };
+                    Options.DocumentTitle = "E-commerce API Documentation";
+                    Options.JsonSerializerOptions = new JsonSerializerOptions()
+                    {
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    };
+                    Options.DocExpansion(DocExpansion.None);
+                    Options.EnableFilter();
+                    //Authrization
+                    Options.EnablePersistAuthorization();
+
+                });
             }
 
             app.UseHttpsRedirection();
